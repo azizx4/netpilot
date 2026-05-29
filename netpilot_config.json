@@ -1,0 +1,11 @@
+{
+  "bandwidth_kbps": 375,
+  "apps": {
+    "discord.exe": "very_high"
+  },
+  "ips": {
+    "1.1.1.1": "very_high",
+    "8.8.8.8": "very_high"
+  },
+  "download_kbps": 1699
+}

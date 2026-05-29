@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+*.pyo
+benchmark_with.json
+benchmark_without.json
+.claude/
+*.gif
+CLAUDE_CODE_PROMPT.md
+VISION.md
