@@ -170,7 +170,7 @@ class NetPilotEngine:
         """
         TCP Window Clamping — يعدّل الـ window بالـ ACK عشان السيرفر يبطّئ.
 
-        هذا أقرب شي لـ cFosSpeed — بدل ما نسقط الباكت بعد ما وصل،
+        بدل ما نسقط الباكت بعد ما وصل،
         نقول للسيرفر "ما أقدر أستقبل أكثر من كذا" فيبطّئ بنفسه.
 
         - نعدّل outbound ACK packets فقط
@@ -542,7 +542,7 @@ class NetPilotEngine:
 
         factor = 0.5 → نسمح بنصف الـ BDP فقط
         هذا يخلّي طابور المودم ما يمتلئ أبداً
-        (أقرب لـ cFosSpeed الي يستخدم kernel-level shaping)
+        هذا يخلّي طابور المودم ما يمتلئ
         """
         if self.download_kbps <= 0:
             self._dl_max_window = 0

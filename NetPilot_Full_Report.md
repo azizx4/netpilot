@@ -190,46 +190,7 @@ This was the primary stress test — simulating heavy concurrent download usage.
 
 ---
 
-## 4. Comparison with cFosSpeed
-
-> **Important:** NetPilot showed promising results in a limited local test environment. A fair comparison with cFosSpeed requires same-machine, same-network, same-workload A/B testing, which was not conducted. The cFosSpeed numbers below are from their published documentation, not from our test environment.
-
-### Architecture Difference
-
-| | cFosSpeed | NetPilot |
-|--|-----------|---------|
-| Runs at | Kernel level (NDIS filter driver) | Userspace (via WinDivert) |
-| Download shaping | True kernel-level queue and release | Policing + Window Clamping |
-| Maturity | 15+ years of development | Experimental prototype |
-| WinDivert dependency | NetPilot does not implement a custom NDIS kernel driver, but it relies on WinDivert, which uses a kernel-mode driver for packet interception. |
-
-### Available Data Points
-
-| Metric | cFosSpeed (their published data) | NetPilot (our local test) |
-|--------|--------------------------------|--------------------------|
-| Download ping reduction ratio | 3.2x | 4.3x (578 -> 134ms) |
-| Upload ping increase | +10ms | +0ms |
-| Download ping increase | +5ms | +19ms |
-
-**These numbers are not directly comparable** — they come from different test environments, different link speeds, different geographic locations, and different workloads. The cFosSpeed data is from their controlled testing; the NetPilot data is from a single test environment in Saudi Arabia.
-
-### cFosSpeed Advantages
-- Kernel-level packet processing (lower per-packet overhead)
-- True download shaping via kernel queue
-- NIC hardware offloading support
-- 15+ years of maturity and optimization
-- Deep packet inspection capabilities
-
-### NetPilot Characteristics
-- Free and open source
-- Uses modern AQM algorithms (CoDel, Fair Queue)
-- Adaptive RTT-based window control
-- No custom kernel driver (relies on WinDivert's driver)
-- Experimental — not yet tested across diverse environments
-
----
-
-## 5. Limitations
+## 4. Limitations
 
 ### Requires specific environment
 - **Administrator privileges** required (WinDivert needs elevated access)
@@ -254,7 +215,7 @@ This was the primary stress test — simulating heavy concurrent download usage.
 
 ---
 
-## 6. Future Work
+## 5. Future Work
 
 Possible extensions:
 - Broader environment testing (different ISPs, link speeds, geographic locations)
@@ -264,14 +225,11 @@ Possible extensions:
 
 ---
 
-## 7. File Structure
+## 6. File Structure
 
 ```
-C:\ccf\
-├── CLAUDE.md                    # Project development rules
-├── netpilot_config.json         # User settings (bandwidth, apps, IPs)
+netpilot/
 ├── requirements.txt             # Dependencies
-├── NetPilot_vs_cFosSpeed.md     # Comparison notes
 ├── NetPilot_Full_Report.md      # This file
 └── netpilot/
     ├── __init__.py
@@ -297,7 +255,7 @@ customtkinter>=5.2.0 # GUI toolkit
 
 ---
 
-## 8. How to Run
+## 7. How to Run
 
 ```bash
 # Install dependencies
@@ -317,7 +275,7 @@ python -m netpilot.benchmark --without
 
 ---
 
-## 9. Raw Test Data
+## 8. Raw Test Data
 
 ### No QoS — YouTube 4K + 3x100MB (Run 1, 25 pings)
 ```
@@ -345,7 +303,7 @@ Avg=122ms Max=136ms Min=112ms
 
 ---
 
-## 10. Conclusion
+## 9. Conclusion
 
 This project is best understood as a research prototype and engineering experiment. Its value is not in claiming to be a finished network optimizer, but in demonstrating how known networking concepts — Fair Queuing, CoDel, Token Buckets, TCP Window Clamping, and adaptive RTT feedback — can be combined and tested in a Windows user-space environment.
 

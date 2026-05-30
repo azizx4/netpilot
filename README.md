@@ -26,7 +26,7 @@ Endpoint-side download control is fundamentally limited — bufferbloat occurs a
 - **Rate Policing** — token bucket pass/drop on inbound packets (catches UDP/QUIC)
 - **Adaptive RTT feedback** — background ping adjusts window proportionally to measured congestion
 
-> Download control cannot match kernel-level shaping (e.g., cFosSpeed's NDIS driver). This is documented honestly throughout the project.
+> Endpoint-side download control is fundamentally limited. This is documented honestly throughout the project.
 
 ---
 
@@ -130,12 +130,6 @@ netpilot/
 - **May conflict with VPNs, firewalls, or other packet-intercepting software**
 - **Results are environment-specific** — different hardware, ISPs, and link speeds will produce different results
 - **Not a replacement for proper SQM/CAKE on a router** — that remains the correct solution for bufferbloat
-
-## How it compares to cFosSpeed
-
-See [NetPilot_vs_cFosSpeed.md](NetPilot_vs_cFosSpeed.md) for a detailed (and honest) comparison. Key difference: cFosSpeed uses a kernel-level NDIS filter driver with 15+ years of development. NetPilot operates in userspace via WinDivert. This architectural gap cannot be closed without implementing a custom kernel driver.
-
----
 
 ## License
 
