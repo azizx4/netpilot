@@ -81,7 +81,7 @@ ICMP ──> kernel direct (zero overhead from NetPilot)
 ## Installation
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/netpilot.git
+git clone https://github.com/azizx4/netpilot.git
 cd netpilot
 pip install -r requirements.txt
 ```
