@@ -17,7 +17,7 @@ CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "ne
 
 # الأولويات المتاحة
 PRIORITY_VERY_HIGH = "very_high"   # → Voice tin (أعلى أولوية)
-PRIORITY_HIGH = "high"             # → Game tin
+PRIORITY_HIGH = "high"             # → High tin
 PRIORITY_NORMAL = "normal"         # → Normal tin (الافتراضي)
 
 DEFAULT_BANDWIDTH = 375

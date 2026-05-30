@@ -5,7 +5,7 @@ Experimental implementation for studying queue management behavior.
 بمفاهيم CCNA:
 - الـ 4 Tins تشبه class-map + policy-map بالـ MQC:
   * Voice (EF) → أعلى أولوية، مثل priority queue
-  * Gaming (AF41) → أولوية عالية
+  * High (AF41) → أولوية عالية
   * Normal (AF21) → best effort
   * Bulk (AF11) → scavenger/bulk
 
@@ -30,20 +30,20 @@ from netpilot.codel import CoDel, QueuedPacket
 
 # ── Tin definitions ──────────────────────────────────
 TIN_VOICE  = 0
-TIN_GAME   = 1
+TIN_HIGH   = 1
 TIN_NORMAL = 2
 TIN_BULK   = 3
 
 TIN_NAMES = {
     TIN_VOICE:  "Voice",
-    TIN_GAME:   "Game",
+    TIN_HIGH:   "High",
     TIN_NORMAL: "Normal",
     TIN_BULK:   "Bulk",
 }
 
 TIN_WEIGHTS = {
     TIN_VOICE:  8,
-    TIN_GAME:   6,
+    TIN_HIGH:   6,
     TIN_NORMAL: 3,
     TIN_BULK:   1,
 }
@@ -51,7 +51,7 @@ TIN_WEIGHTS = {
 # حد أقصى للطابور لكل tin (عدد الباكتات)
 TIN_MAX_QUEUE = {
     TIN_VOICE:  50,
-    TIN_GAME:   100,
+    TIN_HIGH:   100,
     TIN_NORMAL: 500,
     TIN_BULK:   1000,
 }
@@ -173,14 +173,14 @@ class SQMEngine:
 
         # 4 Tins — نحفظ references مباشرة عشان نتجنب dict lookup
         self._voice_q = FairQueue(TIN_VOICE)
-        self._game_q = FairQueue(TIN_GAME)
+        self._high_q = FairQueue(TIN_HIGH)
         self._normal_q = FairQueue(TIN_NORMAL)
         self._bulk_q = FairQueue(TIN_BULK)
 
         # dict للوصول بالـ index (إحصائيات + enqueue)
         self.tins: dict[int, FairQueue] = {
             TIN_VOICE:  self._voice_q,
-            TIN_GAME:   self._game_q,
+            TIN_HIGH:   self._high_q,
             TIN_NORMAL: self._normal_q,
             TIN_BULK:   self._bulk_q,
         }
@@ -226,7 +226,7 @@ class SQMEngine:
             if priority == "very_high":
                 return TIN_VOICE
             elif priority == "high":
-                return TIN_GAME
+                return TIN_HIGH
 
         return TIN_NORMAL
 
@@ -248,18 +248,18 @@ class SQMEngine:
     def dequeue(self) -> QueuedPacket | None:
         """
         يطلّع الباكت الجاي حسب الأولوية.
-        Voice → Game (strict priority)
+        Voice → High (strict priority)
         Normal → Bulk (weighted 3:1)
 
         يستخدم direct references بدل dict lookups.
         يستخدم is_empty بدل .size (أرخص).
         """
-        # Strict priority: Voice أول، بعدها Game
+        # Strict priority: Voice أول، بعدها High
         pkt = self._voice_q.dequeue()
         if pkt is not None:
             return pkt
 
-        pkt = self._game_q.dequeue()
+        pkt = self._high_q.dequeue()
         if pkt is not None:
             return pkt
 

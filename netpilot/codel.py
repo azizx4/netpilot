@@ -26,7 +26,7 @@ class QueuedPacket:
     packet: object          # pydivert packet
     enqueue_time: float     # متى دخل الطابور (monotonic)
     flow_id: str            # معرّف الـ flow
-    tin: int                # رقم الـ tin (0=voice, 1=game, 2=normal, 3=bulk)
+    tin: int                # رقم الـ tin (0=voice, 1=high, 2=normal, 3=bulk)
     size: int               # حجم الباكت بالبايت
 
 

@@ -76,7 +76,7 @@ Layer 2 — Rate Policing (reactive):
 | Tin | Priority | Classification | Queue Size | Rate Control |
 |-----|----------|---------------|------------|-------------|
 | Voice | Highest (strict) | User-configured "Very High" processes | 50 packets | No token bucket |
-| Game | High (strict) | User-configured "High" processes | 100 packets | No token bucket |
+| High | High (strict) | User-configured "High" processes | 100 packets | No token bucket |
 | Normal | Medium (weighted 3:1) | Unclassified traffic | 500 packets | Token bucket limited |
 | Bulk | Low (weighted 3:1) | Background traffic | 1000 packets | Token bucket limited |
 
@@ -106,8 +106,8 @@ Layer 2 — Rate Policing (reactive):
 - **Location:** Saudi Arabia
 - **Download speed:** ~17 Mbps (ISP measured)
 - **Link speed:** 433 Mbps (NIC)
-- **Baseline ping to Discord:** ~115-120ms
-- **Test targets:** Discord (162.159.x.x), Cloudflare (1.1.1.1), Google DNS (8.8.8.8)
+- **Baseline ping:** ~115-120ms
+- **Test targets:** Cloudflare (1.1.1.1), Google DNS (8.8.8.8), Discord (162.159.x.x)
 
 ---
 
@@ -254,18 +254,13 @@ This was the primary stress test — simulating heavy concurrent download usage.
 
 ---
 
-## 6. Future Work: Security Visibility Layer
+## 6. Future Work
 
-The next phase may explore lightweight defensive security visibility. Since the engine already classifies traffic by process, flow, protocol, and destination, it could be extended to collect network telemetry such as:
-
-- Process-to-destination mapping (which process connects where)
-- Suspicious outbound connection indicators
-- High-volume upload behavior detection
-- PowerShell/CMD network activity monitoring
-- Unknown executable network access logging
-- Beacon-like periodic connection detection
-
-The goal is not to decrypt or inspect private content, but to analyze network metadata for defensive visibility and anomaly detection. This would position the project as a dual-purpose tool: network quality research and endpoint security telemetry.
+Possible extensions:
+- Broader environment testing (different ISPs, link speeds, geographic locations)
+- Lightweight security visibility layer (process-to-destination mapping, anomaly detection)
+- Additional AQM algorithm comparisons
+- QUIC-aware download control
 
 ---
 

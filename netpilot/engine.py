@@ -485,7 +485,7 @@ class NetPilotEngine:
 
         print(f"  Fast-path sent: {self._fast_path_sent}")
 
-        for name in ("Voice", "Game", "Normal", "Bulk"):
+        for name in ("Voice", "High", "Normal", "Bulk"):
             s = stats[name]
             if s["sent"] > 0 or s["queue_size"] > 0:
                 drop_info = f", dropped: {s['dropped']}" if s['dropped'] > 0 else ""

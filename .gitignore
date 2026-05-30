@@ -7,3 +7,5 @@ benchmark_without.json
 *.gif
 CLAUDE_CODE_PROMPT.md
 VISION.md
+CLAUDE.md
+netpilot_config.json

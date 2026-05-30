@@ -5,12 +5,12 @@ if sys.stdout.encoding != "utf-8":
     sys.stdout.reconfigure(encoding="utf-8")
 
 """
-اكتشاف البرامج المستهدفة (ألعاب، ديسكورد، تيمز).
+اكتشاف البرامج المستهدفة (برامج ذات أولوية).
 
 الفكرة:
 - نمسح كل العمليات الشغالة عن طريق psutil
 - نقارن اسم العملية بقائمة معروفة
-- نرجّع قائمة بالبرامج المكتشفة مع PID + نوعها (game / voice)
+- نرجّع قائمة بالبرامج المكتشفة مع PID + نوعها (realtime / voice)
 """
 
 import psutil
@@ -18,27 +18,10 @@ from dataclasses import dataclass
 
 # ---------- البرامج المعروفة ----------
 # كل برنامج له: اسم الملف (lowercase) ← (اسم العرض، النوع)
-# النوع: "game" = لعبة، "voice" = مكالمة صوتية
+# النوع: "realtime" = تطبيق حساس للتأخير، "voice" = مكالمة صوتية
 # سهل تضيف عليها بعدين
 
 KNOWN_APPS: dict[str, tuple[str, str]] = {
-    # ---- ألعاب ----
-    "valorant.exe":         ("Valorant",            "game"),
-    "riotclientservices.exe":("Riot Client",         "game"),
-    "leagueclient.exe":     ("League of Legends",   "game"),
-    "league of legends.exe":("League of Legends",   "game"),
-    "csgo.exe":             ("CS:GO",               "game"),
-    "cs2.exe":              ("CS2",                  "game"),
-    "fortnite.exe":         ("Fortnite",            "game"),
-    "fortniteclient-win64-shipping.exe": ("Fortnite", "game"),
-    "overwatch.exe":        ("Overwatch",           "game"),
-    "rocketleague.exe":     ("Rocket League",       "game"),
-    "apex_legends.exe":     ("Apex Legends",        "game"),
-    "r5apex.exe":           ("Apex Legends",        "game"),
-    "gta5.exe":             ("GTA V",               "game"),
-    "minecraft.exe":        ("Minecraft",           "game"),
-    "javaw.exe":            ("Minecraft (Java)",    "game"),
-
     # ---- صوت/مكالمات ----
     "discord.exe":          ("Discord",             "voice"),
     "teams.exe":            ("Microsoft Teams",     "voice"),
@@ -53,7 +36,7 @@ class DetectedApp:
     pid: int
     exe_name: str       # مثل "discord.exe"
     display_name: str   # مثل "Discord"
-    app_type: str       # "game" أو "voice"
+    app_type: str       # "realtime" أو "voice"
 
 
 def detect_running_apps() -> list[DetectedApp]:
@@ -107,14 +90,14 @@ if __name__ == "__main__":
 
     if not apps:
         print("ما لقيت أي برنامج معروف شغال.")
-        print("شغّل لعبة أو ديسكورد وجرب مرة ثانية.")
+        print("شغّل برنامج ذو أولوية وجرب مرة ثانية.")
     else:
-        games = [a for a in apps if a.app_type == "game"]
+        realtime = [a for a in apps if a.app_type == "realtime"]
         voice = [a for a in apps if a.app_type == "voice"]
 
-        if games:
-            print(f"ألعاب ({len(games)}):")
-            for app in games:
+        if realtime:
+            print(f"تطبيقات حساسة ({len(realtime)}):")
+            for app in realtime:
                 print(f"  [{app.pid}] {app.display_name}")
 
         if voice:

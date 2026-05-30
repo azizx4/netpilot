@@ -70,8 +70,8 @@ def monitor_traffic(duration_seconds: int = 10, refresh_interval: float = 2.0):
     # --- اكتشاف البرامج ---
     priority_apps = detect_running_apps()
     if not priority_apps:
-        print("ما لقيت أي برنامج ذو أولوية شغال (لعبة/ديسكورد/تيمز).")
-        print("شغّل واحد وجرب مرة ثانية.")
+        print("ما لقيت أي برنامج ذو أولوية شغال.")
+        print("شغّل برنامج ذو أولوية وجرب مرة ثانية.")
         return
 
     print("برامج مكتشفة ذات أولوية:")

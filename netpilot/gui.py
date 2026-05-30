@@ -174,7 +174,7 @@ class NetPilotGUI(ctk.CTk):
             ("Normal", 2, NORMAL_C),
             ("Bulk", 3, TEXT_DIM),
         ]
-        tin_map = {"Very High": "Voice", "High": "Game", "Normal": "Normal", "Bulk": "Bulk"}
+        tin_map = {"Very High": "Voice", "High": "High", "Normal": "Normal", "Bulk": "Bulk"}
 
         for display_name, col, color in tins:
             card = ctk.CTkFrame(tins_frame, fg_color=CARD_BG, corner_radius=10,
@@ -864,8 +864,8 @@ class NetPilotGUI(ctk.CTk):
                 )
                 self._set_status("Running — no priority apps active")
 
-            # Tin stats — map Voice→Very High, Game→High
-            for tin_name in ("Voice", "Game", "Normal", "Bulk"):
+            # Tin stats
+            for tin_name in ("Voice", "High", "Normal", "Bulk"):
                 if tin_name in stats:
                     s = stats[tin_name]
                     labels = self.tin_labels[tin_name]

@@ -4,7 +4,7 @@ NetPilot Benchmark — تقييم شامل لجاهزية البرنامج.
 يقيس:
 1. Baseline latency (بدون حمل)
 2. Latency under upload stress (bufferbloat)
-3. Jitter (تذبذب البنق)
+3. Jitter (تذبذب التأخير)
 4. Packet loss
 5. المقارنة: مع وبدون NetPilot
 
@@ -38,7 +38,7 @@ PING_COUNT = 20
 
 
 def parse_ping_results(output: str) -> list[float]:
-    """يستخرج أوقات البنق من output ويندوز."""
+    """يستخرج أوقات الـ RTT من output ويندوز."""
     times = []
     for line in output.splitlines():
         match = re.search(r"time[=<](\d+)ms", line)
@@ -61,8 +61,8 @@ def run_ping(target_ip: str, count: int = 20) -> list[float]:
 
 def calc_jitter(times: list[float]) -> float:
     """
-    يحسب الـ Jitter — معدل الفرق بين كل بنقتين متتاليتين.
-    مهم للألعاب والمكالمات — jitter عالي = صوت متقطع / rubber banding.
+    يحسب الـ Jitter — معدل الفرق بين كل قياسين متتاليين.
+    مهم للتطبيقات الحساسة للتأخير — jitter عالي = أداء غير مستقر.
     """
     if len(times) < 2:
         return 0.0
@@ -71,7 +71,7 @@ def calc_jitter(times: list[float]) -> float:
 
 
 def calc_percentile(times: list[float], p: float) -> float:
-    """P95/P99 — أسوأ الحالات (الي يحسها اللاعب)."""
+    """P95/P99 — أسوأ الحالات (tail latency)."""
     if not times:
         return 0.0
     sorted_t = sorted(times)
@@ -132,7 +132,7 @@ def print_header(text: str):
 
 
 def print_results(name: str, times: list[float]):
-    """يطبع نتائج بنق واحد بشكل مفصّل."""
+    """يطبع نتائج قياس واحد بشكل مفصّل."""
     if not times:
         print(f"  {name}: FAILED (0 replies)")
         return
