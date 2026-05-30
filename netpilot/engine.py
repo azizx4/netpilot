@@ -177,15 +177,24 @@ class NetPilotEngine:
         - NIC hardware يحسب الـ checksum تلقائياً (offloading)
         """
         raw = packet.raw
+
+        # Bounds check: minimum IP + TCP header = 40 bytes
+        if len(raw) < 40:
+            return
+
         ihl = (raw[0] & 0x0F) * 4
+        if ihl < 20 or ihl + 20 > len(raw):
+            return
 
         flags = raw[ihl + 13]
 
         # SYN packet — نكتشف الـ Window Scale من الـ TCP Options
         if flags & 0x02:
+            if ihl + 12 >= len(raw):
+                return
             tcp_data_offset = (raw[ihl + 12] >> 4) * 4
             i = ihl + 20  # بعد TCP header الأساسي
-            end = ihl + tcp_data_offset
+            end = min(ihl + tcp_data_offset, len(raw))
             while i < end:
                 kind = raw[i]
                 if kind == 0:
@@ -193,10 +202,16 @@ class NetPilotEngine:
                 if kind == 1:
                     i += 1
                     continue
+                if i + 1 >= end:
+                    break
                 length = raw[i + 1]
-                if kind == 3 and length == 3:  # Window Scale option
-                    self._dl_window_scale = raw[i + 2]
-                    self._calc_max_window()
+                if length < 2:  # حماية من infinite loop
+                    break
+                if kind == 3 and length == 3 and i + 2 < end:
+                    scale = raw[i + 2]
+                    if 0 <= scale <= 14:  # Window Scale valid range
+                        self._dl_window_scale = scale
+                        self._calc_max_window()
                 i += length
             return
 

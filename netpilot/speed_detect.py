@@ -96,8 +96,8 @@ def measure_download_speed() -> tuple[int, str]:
 
     # نستخدم ملف 1MB من Cloudflare — سريع وموثوق
     test_urls = [
-        ("http://speed.cloudflare.com/__down?bytes=2000000", 2_000_000),
-        ("http://speedtest.tele2.net/1MB.zip", 1_000_000),
+        ("https://speed.cloudflare.com/__down?bytes=2000000", 2_000_000),
+        ("https://speedtest.tele2.net/1MB.zip", 1_000_000),
     ]
 
     for url, expected_size in test_urls:

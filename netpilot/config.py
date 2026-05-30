@@ -11,7 +11,7 @@ Config — حفظ وتحميل إعدادات المستخدم.
 
 import json
 import os
-import re
+import ipaddress
 
 CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "netpilot_config.json")
 
@@ -23,13 +23,14 @@ PRIORITY_NORMAL = "normal"         # → Normal tin (الافتراضي)
 DEFAULT_BANDWIDTH = 375
 DEFAULT_DOWNLOAD_BANDWIDTH = 0  # 0 = disabled
 
-# Regex لفحص IP
-_IP_RE = re.compile(r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$")
-
 
 def is_ip(value: str) -> bool:
-    """يشيك هل القيمة IP address."""
-    return bool(_IP_RE.match(value))
+    """يشيك هل القيمة IPv4 address صالح."""
+    try:
+        ipaddress.IPv4Address(value)
+        return True
+    except (ipaddress.AddressValueError, ValueError):
+        return False
 
 
 def _make_default() -> dict:
